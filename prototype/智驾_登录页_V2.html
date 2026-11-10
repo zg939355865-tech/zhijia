@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="zh-CN" data-component-baseline="veridix-component-baseline-v1">
+<head>
+<!-- 2026-11-10：按污水厂项目资料调整品牌、业务表达及登录跳转；保留现有组件 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>污水厂生产智驾运管平台｜登录</title>
+<!--
+  入口页（不属任何二级菜单，不进入菜单框架内嵌）
+  规范：rules/tech.md §4–§5（单文件自包含、不外链 CDN、色值单源）、rules/prototype.md §6（B 端界面原则）
+  依赖：../assets/components/tokens.css + components.css；字体使用本地字体栈，不引外链字体
+  页面级样式只写布局与装饰动效，控件一律用 vc-* 组件类
+-->
+<link rel="stylesheet" href="../assets/components/tokens.css">
+<link rel="stylesheet" href="../assets/components/components.css">
+<style>
+  /* ===== 布局与装饰（颜色全部取令牌） ===== */
+  html,body{height:100%}
+  body{margin:0;overflow:hidden}
+
+  .lg{display:flex;min-height:100vh}
+
+  /* ---------- 左：品牌 ---------- */
+  .lg-left{flex:1.25;position:relative;overflow:hidden;display:flex;flex-direction:column;
+    justify-content:center;padding:8vh 6vw;
+    background:
+      radial-gradient(1200px 600px at -10% 110%,var(--glow-teal),transparent 60%),
+      radial-gradient(900px 500px at 110% -20%,var(--glow-gold),transparent 60%),
+      linear-gradient(160deg,var(--bg-page) 0%,var(--panel-bg) 55%,var(--bg-deep) 100%)}
+  .lg-grid{position:absolute;inset:0;pointer-events:none;
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:44px 44px;
+    /* #000 仅作 mask 蒙版的不透明锚点，不参与主题配色（非色值单源适用范围） */
+    mask-image:radial-gradient(120% 90% at 30% 40%,#000 30%,transparent 75%);
+    -webkit-mask-image:radial-gradient(120% 90% at 30% 40%,#000 30%,transparent 75%)}
+  .lg-net{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.8}
+  .lg-net .edge{fill:none;stroke:var(--teal-l);stroke-width:1;stroke-dasharray:5 6;animation:flow 2.6s linear infinite}
+  .lg-net .edge.amber{stroke:var(--gold-l);animation-duration:3.4s;animation-direction:reverse}
+  @keyframes flow{to{stroke-dashoffset:-44}}
+  .lg-net .node{fill:var(--panel-bg);stroke:var(--teal-web);stroke-width:1.5}
+  .lg-net .node.amber{stroke:var(--gold-web)}
+  .lg-net .halo{fill:var(--teal-web);opacity:.45;animation:halo 2.8s ease-out infinite}
+  .lg-net .halo.amber{fill:var(--gold-web)}
+  @keyframes halo{0%{r:4;opacity:.7}100%{r:22;opacity:0}}
+  .lg-scan{position:absolute;left:0;right:0;height:120px;top:-140px;pointer-events:none;
+    background:linear-gradient(180deg,transparent,var(--glow-teal),transparent);animation:scan 7s linear infinite}
+  @keyframes scan{to{top:110%}}
+
+  .lg-brand{position:relative;z-index:2;max-width:640px}
+  .lg-kicker{display:flex;align-items:center;gap:14px;margin-bottom:34px;animation:riseIn .7s .1s both}
+  .lg-kicker .vc-hex{width:52px;height:52px;font-size:20px}
+  .lg-name b{display:block;font-family:var(--font-disp);font-size:19px;font-weight:700;letter-spacing:.06em;color:var(--ink)}
+  .lg-name span{display:block;font-family:var(--font-num);font-size:10.5px;letter-spacing:.3em;
+    color:var(--gray);text-transform:uppercase}
+  .lg-slogan{margin:0;font-size:clamp(30px,4.2vw,54px);font-weight:900;line-height:1.25;letter-spacing:.04em;
+    color:var(--ink);animation:riseIn .7s .25s both}
+  .lg-slogan em{font-style:normal;color:var(--gold)}
+  .lg-slogan .thin{display:block;margin-top:10px;font-family:var(--font-disp);font-weight:300;
+    font-size:.36em;letter-spacing:.14em;color:var(--teal-web)}
+  .lg-intro{margin-top:26px;max-width:520px;font-size:15px;color:var(--gray);animation:riseIn .7s .4s both}
+  .lg-stats{display:flex;gap:14px;margin-top:44px;flex-wrap:wrap;animation:riseIn .7s .55s both}
+  .lg-stat{min-width:120px;padding:12px 20px;background:var(--panel-bg);
+    border:1px solid var(--line);box-shadow:var(--sh-card)}
+  .lg-stat b{display:block;font-family:var(--font-disp);font-size:26px;font-weight:700;
+    letter-spacing:.02em;color:var(--teal)}
+  .lg-stat b i{font-style:normal;font-size:14px;font-weight:500;color:var(--gray)}
+  .lg-stat span{font-size:12px;color:var(--gray)}
+  .lg-stat:nth-child(2) b{color:var(--gold)}
+  .lg-stat:nth-child(3) b{color:var(--ok)}
+  @keyframes riseIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+  /* 入场动画的可访问性兜底：系统开启「减少动态效果」或页面被静态截图/打印时，直接呈现终态，
+     避免 opacity:0 + both 让整页看起来是空的（2026-10-28） */
+  @media (prefers-reduced-motion: reduce){
+    .lg-kicker, .lg-slogan, .lg-intro, .lg-stats, .lg-card, .lg-marquee .track,
+    .lg-net .edge, .lg-net .halo, .lg-scan{animation:none!important;opacity:1!important;transform:none!important}
+  }
+
+  .lg-marquee{position:absolute;left:0;right:0;bottom:0;z-index:2;overflow:hidden;
+    border-top:1px solid var(--line-soft);background:var(--panel-bg);padding:12px 0}
+  .lg-marquee .track{display:flex;gap:56px;width:max-content;animation:marq 26s linear infinite;
+    font-family:var(--font-num);font-size:11.5px;letter-spacing:.12em;color:var(--gray-l);text-transform:uppercase}
+  .lg-marquee .track b{color:var(--teal-web);font-weight:500}
+  @keyframes marq{to{transform:translateX(-50%)}}
+
+  /* ---------- 右：登录卡 ---------- */
+  .lg-right{flex:1;min-width:420px;display:flex;align-items:center;justify-content:center;position:relative;
+    background:linear-gradient(180deg,var(--panel-bg),var(--bg-page));border-left:1px solid var(--line-soft)}
+  .lg-right::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px);background-size:100% 6px}
+  .lg-card{position:relative;width:min(400px,84%);animation:riseIn .7s .3s both}
+  .lg-card .corner{position:absolute;width:16px;height:16px;border:2px solid var(--gold-web)}
+  .lg-card .c1{top:-6px;left:-6px;border-right:0;border-bottom:0}
+  .lg-card .c2{top:-6px;right:-6px;border-left:0;border-bottom:0}
+  .lg-card .c3{bottom:-6px;left:-6px;border-right:0;border-top:0}
+  .lg-card .c4{bottom:-6px;right:-6px;border-left:0;border-top:0}
+  .lg-card__inner{background:var(--panel-bg);border:1px solid var(--line);
+    padding:38px 34px 30px;box-shadow:var(--sh-pop);
+    clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)}
+  .lg-card h2{margin:0;font-size:20px;font-weight:700;letter-spacing:.08em;color:var(--ink)}
+  .lg-card .sub{margin:6px 0 26px;font-family:var(--font-num);font-size:11px;letter-spacing:.22em;
+    color:var(--gray-l);text-transform:uppercase}
+  .lg-row{display:flex;align-items:center;justify-content:space-between;margin:2px 0 18px}
+  .lg-row label{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--gray);cursor:pointer}
+  .lg-row input[type=checkbox]{width:15px;height:15px;accent-color:var(--gold-d);cursor:pointer}
+  .lg-row a{font-family:var(--font-num);font-size:12px;color:var(--teal-web);text-decoration:none}
+  .lg-row a:hover{color:var(--gold);text-decoration:underline}
+  .lg-submit{letter-spacing:.3em;font-family:var(--font-disp);font-size:16px;
+    clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+  .lg-err{min-height:22px;margin:0 0 6px;font-family:var(--font-num);font-size:12.5px}
+
+  /* ---------- 窄屏与打印 ---------- */
+  @media (max-width:1100px){
+    body{overflow:auto}
+    .lg{flex-direction:column}
+    .lg-left{padding:44px 26px 60px}
+    .lg-right{border-left:0;border-top:1px solid var(--line-soft);padding:40px 26px 56px;min-width:0}
+    .lg-marquee{position:static}
+    .lg-net,.lg-grid{opacity:.5}
+  }
+  @media print{
+    .lg-net,.lg-grid,.lg-scan,.lg-marquee,.lg-card .corner{display:none}
+    body{overflow:visible;background:var(--panel-bg)}
+  }
+
+/* 2026-11-10：水务风格与 AI 智能体场景表达，能力为原型展示 */
+.lg-left{flex:1.4;padding:5vh 5vw;background:linear-gradient(145deg,var(--navy),var(--teal));color:var(--panel-bg)}
+.lg-grid{background-image:linear-gradient(var(--teal) 1px,transparent 1px),linear-gradient(90deg,var(--teal) 1px,transparent 1px);opacity:.28}
+.lg-net{opacity:.15}.lg-scan{display:none}.lg-brand{max-width:740px}.lg-kicker{margin-bottom:30px}
+.lg-name b,.lg-slogan{color:var(--panel-bg)}.lg-name span,.lg-intro{color:var(--teal-l)}
+.lg-slogan{font-size:clamp(30px,3.2vw,48px);line-height:1.4;font-weight:700;letter-spacing:.01em}.lg-slogan em{color:var(--teal-l)}.lg-slogan .thin{color:var(--teal-l);font-size:14px;font-weight:400;letter-spacing:2px;margin-top:18px}
+.lg-intro{font-size:14px;line-height:1.9;max-width:600px;margin-top:20px}
+.lg-marquee{background:var(--navy);border-color:var(--gray);padding:10px 0}.lg-marquee .track{animation:none;color:var(--teal-l);gap:32px;justify-content:center;width:auto;font-family:var(--font-ui);letter-spacing:1px}.lg-marquee .track b{color:var(--panel-bg)}.lg-marquee .track span:nth-child(n+5){display:none}
+.lg-right{flex:1;background:var(--bg-page)}.lg-right:before{display:none}.lg-card{width:min(420px,86%)}.lg-card .corner{display:none}.lg-card__inner{clip-path:none;border-radius:8px;padding:36px 32px;box-shadow:var(--sh-pop);border-top:3px solid var(--teal)}.lg-submit{clip-path:none;background:var(--teal)!important;color:var(--panel-bg)!important;border-color:var(--teal)!important;letter-spacing:3px}.lg-submit:hover{background:var(--teal-web)!important}
+@media(max-height:800px) and (min-width:1101px){.lg-left{padding:30px 4vw 58px}.lg-kicker{margin-bottom:20px}.lg-slogan{font-size:36px}.lg-intro{margin-top:16px}.agent-panel{margin-top:20px}.agent-scenes{padding:16px;gap:14px}}
+@media(max-width:1100px){.lg-left{padding:36px 26px 24px}.lg-marquee{margin:28px -26px -24px}.lg-slogan{font-size:36px}.lg-right{padding:36px 20px}}
+@media(max-width:520px){.agent-scenes{grid-template-columns:1fr}.lg-name b{font-size:16px}.lg-slogan{font-size:28px}.agent-heading small{display:none}.lg-marquee .track{flex-wrap:wrap;gap:10px}.lg-card{width:100%}}
+
+/* 2026-11-10：移除场景卡片，左右共用完整水务背景 */
+body{background:var(--navy)}
+.lg{position:relative;isolation:isolate;background:radial-gradient(ellipse at 55% 100%,var(--teal),transparent 68%),linear-gradient(120deg,var(--navy) 10%,var(--navy-2) 150%)}
+.lg:before,.lg:after{content:"";position:absolute;z-index:-1;pointer-events:none;width:105vw;height:54vw;left:-18vw;bottom:-41vw;border:1px solid var(--steel);border-radius:50%;transform:rotate(-12deg);opacity:.24}
+.lg:after{width:120vw;height:60vw;left:-12vw;bottom:-44vw;opacity:.15}
+.lg-left{position:static;background:transparent;overflow:visible;flex:1.4;padding:8vh 6vw;justify-content:center}
+.lg-right{background:transparent;border:0;flex:1;padding:48px 5vw 48px 0;min-width:420px}
+.lg-grid{position:absolute;inset:0;background-size:72px 72px;opacity:.12;mask-image:linear-gradient(135deg,transparent,var(--navy));-webkit-mask-image:linear-gradient(135deg,transparent,var(--navy))}
+.lg-net{display:none}.lg-marquee{display:none}
+.lg-brand{max-width:720px;padding-bottom:40px}.lg-kicker{margin-bottom:64px}.lg-kicker .vc-hex{background:var(--teal);color:var(--panel-bg)}
+.lg-slogan{font-size:clamp(32px,3.1vw,52px);line-height:1.5;font-weight:600}.lg-slogan .thin{font-size:14px;letter-spacing:3px;margin-top:26px}
+.lg-intro{margin-top:26px;max-width:550px;font-size:14px;line-height:2.1;color:var(--teal-l)}
+.lg-card{width:min(420px,100%)}.lg-card__inner{padding:40px 34px 34px;border:1px solid var(--teal-l);border-top:3px solid var(--teal-web);border-radius:12px;background:var(--panel-bg);box-shadow:var(--sh-pop)}
+.lg-card h2{font-size:24px;letter-spacing:2px}.lg-card .sub{letter-spacing:1px;line-height:1.8;margin-bottom:24px}.lg-row input[type=checkbox]{accent-color:var(--teal)}
+.lg-submit{border-radius:4px}.lg-row a:hover{color:var(--teal)}
+@media(max-height:800px) and (min-width:1101px){.lg-left{padding:40px 5vw}.lg-kicker{margin-bottom:38px}.lg-slogan{font-size:38px}.lg-right{padding:30px 4vw 30px 0}}
+@media(max-width:1100px){body{overflow:auto}.lg-left{padding:42px 7vw 24px}.lg-brand{padding:0;max-width:720px}.lg-kicker{margin-bottom:28px}.lg-right{padding:16px 7vw 48px;min-width:0}.lg-card{width:min(480px,100%)}.lg-slogan{font-size:36px}.lg-intro{max-width:650px;margin-top:18px}}
+@media(max-width:520px){.lg-slogan{font-size:28px}.lg-slogan .thin{font-size:12px;letter-spacing:1px}.lg-card__inner{padding:30px 24px}.lg-name b{font-size:15px}.lg-name span{font-size:9px;letter-spacing:1px}}
+</style>
+</head>
+<body class="vc-page">
+
+<div class="lg">
+
+  <!-- ============ 左：品牌与说明 ============ -->
+  <section class="lg-left">
+    <div class="lg-grid" aria-hidden="true"></div>
+
+    <!-- 数据流拓扑（装饰，颜色取令牌） -->
+    <svg class="lg-net" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path class="edge" d="M120 640 L360 430 L640 520 L900 300 L1120 380"/>
+      <path class="edge amber" d="M360 430 L420 180 L760 120 L1060 220"/>
+      <path class="edge" d="M640 520 L420 180"/>
+      <path class="edge amber" d="M760 120 L900 300"/>
+      <path class="edge" d="M120 640 L300 760 L700 740 L1120 620"/>
+      <g>
+        <circle class="halo" cx="360" cy="430" r="4"/><circle class="node" cx="360" cy="430" r="5"/>
+        <circle class="halo amber" cx="760" cy="120" r="4"/><circle class="node amber" cx="760" cy="120" r="6"/>
+        <circle class="halo" cx="640" cy="520" r="4"/><circle class="node" cx="640" cy="520" r="5"/>
+        <circle class="halo amber" cx="900" cy="300" r="4"/><circle class="node amber" cx="900" cy="300" r="5"/>
+        <circle class="halo" cx="120" cy="640" r="4"/><circle class="node" cx="120" cy="640" r="5"/>
+        <circle class="node" cx="1120" cy="380" r="5"/><circle class="node" cx="420" cy="180" r="4"/>
+        <circle class="node" cx="1060" cy="220" r="4"/><circle class="node" cx="300" cy="760" r="4"/>
+      </g>
+    </svg>
+    <div class="lg-scan" aria-hidden="true"></div>
+
+    <div class="lg-brand">
+      <div class="lg-kicker">
+        <div class="vc-hex">水</div>
+        <div class="lg-name">
+          <b>污水厂生产智驾运管平台</b>
+          <span>Wastewater Operations Platform</span>
+        </div>
+      </div>
+
+      <!-- 2026-11-10：主视觉文案依据蓝图方案“建设背景与目标、设计准则”提炼 -->
+      <h1 class="lg-slogan">智控智管一体协同<br><em>AI 赋能生产运营</em><span class="thin">运行全景可视 · 异常处置闭环 · 运营决策有据</span></h1>
+
+      <p class="lg-intro">连接生产数据、业务工具与运营知识，让 AI 能力融入工艺、告警、设备与经营场景，为当班人员提供有依据、可核查的分析与建议。</p>
+
+      
+    </div>
+
+    <div class="lg-marquee" aria-hidden="true">
+      <div class="track"><span><b>生产监测</b> 掌握运行动态</span><span><b>业务协同</b> 贯通执行过程</span><span><b>运营分析</b> 支撑管理决策</span><span><b>知识服务</b> 辅助业务工作</span><span><b>生产监测</b> 掌握运行动态</span><span><b>业务协同</b> 贯通执行过程</span><span><b>运营分析</b> 支撑管理决策</span><span><b>知识服务</b> 辅助业务工作</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 右：登录平台 ============ -->
+  <section class="lg-right">
+    <form class="lg-card" id="loginForm" novalidate>
+      <i class="corner c1"></i><i class="corner c2"></i><i class="corner c3"></i><i class="corner c4"></i>
+
+      <div class="lg-card__inner">
+        <h2>登录平台</h2>
+        <div class="sub">欢迎使用污水厂生产智驾运管平台</div>
+
+        <div class="vc-alert vc-alert--err lg-err" id="msg" role="alert" aria-live="polite" hidden></div>
+
+        <div class="vc-field">
+          <label class="vc-field__label" for="corp"><span>企业名称</span></label>
+          <div class="vc-input-group" id="corpWrap">
+            <svg class="vc-input-group__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3.5 20.5V6.2l6-2.7v17M9.5 20.5h11V10l-6-2.4"/>
+              <path d="M6 8.4h1.2M6 11.6h1.2M6 14.8h1.2M12.6 12h1.2M12.6 15.2h1.2M12.6 18.4h1.2"/>
+            </svg>
+            <input id="corp" type="text" placeholder="请输入企业名称" autocomplete="organization" spellcheck="false">
+          </div>
+        </div>
+
+        <div class="vc-field">
+          <label class="vc-field__label" for="user"><span>账号</span></label>
+          <div class="vc-input-group" id="userWrap">
+            <svg class="vc-input-group__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="8.4" r="3.9"/><path d="M4.6 20.4c0-4 3.3-6.4 7.4-6.4s7.4 2.4 7.4 6.4"/>
+            </svg>
+            <input id="user" type="text" placeholder="请输入账号" autocomplete="username" spellcheck="false">
+          </div>
+        </div>
+
+        <div class="vc-field">
+          <label class="vc-field__label" for="pwd"><span>密码</span></label>
+          <div class="vc-input-group" id="pwdWrap">
+            <svg class="vc-input-group__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="4.4" y="10.4" width="15.2" height="9.6" rx="1.6"/>
+              <path d="M8.2 10.4V7.6a3.8 3.8 0 0 1 7.6 0v2.8"/>
+            </svg>
+            <input id="pwd" type="password" placeholder="请输入密码" autocomplete="current-password">
+          </div>
+        </div>
+
+        <div class="lg-row">
+          <label><input type="checkbox" id="remember" checked>记住企业名称</label>
+          
+        </div>
+
+        <button type="submit" class="vc-btn vc-btn--brand vc-btn--lg vc-btn--block lg-submit" id="submitBtn">进入平台</button>
+      </div>
+    </form>
+  </section>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var form = document.getElementById("loginForm");
+  var corp = document.getElementById("corp");
+  var user = document.getElementById("user");
+  var pwd  = document.getElementById("pwd");
+  var msg  = document.getElementById("msg");
+  var btn  = document.getElementById("submitBtn");
+  var remember = document.getElementById("remember");
+  var LS = "waterplant.login.corp";
+
+  try{
+    var saved = localStorage.getItem(LS);
+    if(saved){ corp.value = saved; }
+  }catch(e){}
+
+  remember.addEventListener("change", function(){
+    if(!remember.checked){ try{ localStorage.removeItem(LS); }catch(e){} }
+  });
+
+  /* 提示就在卡片内呈现，不使用 Toast */
+  function showMsg(t, ok){
+    msg.textContent = t;
+    msg.className = "vc-alert " + (ok ? "vc-alert--ok" : "vc-alert--err") + " lg-err";
+    msg.hidden = false;
+  }
+  function hideMsg(){ msg.hidden = true; msg.textContent = ""; }
+
+  [[corp,"corpWrap"],[user,"userWrap"],[pwd,"pwdWrap"]].forEach(function(pair){
+    pair[0].addEventListener("input", function(){
+      document.getElementById(pair[1]).classList.remove("is-invalid");
+      hideMsg();
+    });
+  });
+
+  function validate(){
+    var bad = null;
+    if(!corp.value.trim()){ document.getElementById("corpWrap").classList.add("is-invalid"); bad = bad || corp; }
+    if(!user.value.trim()){ document.getElementById("userWrap").classList.add("is-invalid"); bad = bad || user; }
+    if(!pwd.value){ document.getElementById("pwdWrap").classList.add("is-invalid"); bad = bad || pwd; }
+    if(bad){
+      showMsg("请填写完整的企业名称、账号与密码。", false);
+      bad.focus();
+      return false;
+    }
+    return true;
+  }
+
+  form.addEventListener("submit", function(ev){
+    ev.preventDefault();
+    if(!validate()) return;
+
+if(remember.checked){ try{ localStorage.setItem(LS, corp.value.trim()); }catch(e){} }
+    /* 当前租户：无论是否勾选“记住”，都写入本次登录的企业名称，供菜单页显示 */
+    try{ localStorage.setItem("waterplant.tenant", corp.value.trim()); localStorage.setItem("waterplant.user", user.value.trim()); }catch(e){}
+
+    btn.disabled = true;
+    btn.textContent = "登录中…";
+    hideMsg();
+
+    /* 原型：不接后端，校验通过即进入菜单页（真实项目在此调用 POST /api/login，
+       成功后同样跳转统一菜单页；失败则就地提示，不跳转） */
+    setTimeout(function(){
+      btn.textContent = "进入中…";
+      location.href = "智驾_菜单页_V0.1.html";
+    }, 600);
+  });
+
+})();
+</script>
+</body>
+</html>

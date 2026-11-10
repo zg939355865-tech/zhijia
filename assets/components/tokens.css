@@ -1,0 +1,156 @@
+/* 智驾 设计令牌 · Web 端唯一色值来源
+ *
+ * 作用：所有 HTML 原型、架构图、组件片段、产品资料 HTML 的样式变量。
+ * 对应：Word 端色值权威为 business-analysis/_src/docx_kit.py，语义对应关系见 rules/tech.md。
+ * 版本：V2.0（2026-10-21：整档改为工业浅色风——底 #F4F6FA／墨 #16283C／琥珀 #E39217／青 #0D8FAE，
+ *        等宽字体用于编号与标签，新增切角、LED、标签线等令牌；深色档 [data-theme="portal"] 保留备用）。
+ * 规则：新增或修改色值只改本文件，禁止在页面内复制第二份色值。
+ */
+
+:root {
+  /* ── 基色：文字与边框 ───────────────────────────────────── */
+  --navy: #16283C;         /* 主文字（标题、正文重点） */
+  --navy-2: #0A6F88;       /* 次级文字重点：小标题、行首加粗 */
+  --navy-title: #16283C;   /* 页面／图标题 */
+  --ink: #16283C;          /* 正文墨色 */
+  --body: #16283C;         /* 界面正文色 */
+  --gray: #54697F;         /* 次级文字、说明 */
+  --gray-l: #7E93A9;       /* 三级文字、占位、表头标签 */
+
+  /* ── 强调色 ─────────────────────────────────────────────── */
+  --teal: #0A6F88;         /* 强调青（深）：链接、结论、进行中 */
+  --teal-web: #0D8FAE;     /* 强调青（亮）：按钮描边、图表主序列 */
+  --teal-l: #CFE4ED;       /* 淡青底／悬停描边 */
+  --gold: #B26A00;         /* 强调金（深）：主按钮文字、当前项 */
+  --gold-web: #E39217;     /* 强调金（亮）：主按钮底、图标 */
+  --gold-d: #C96F00;       /* 金色悬停／描边 */
+  --gold-l: #FFC85E;       /* 主按钮渐变末端 */
+  --steel: #84A0BD;        /* 中性钢蓝：装饰线、非活动节点 */
+
+  /* ── 底色与边框 ──────────────────────────────────────────── */
+  --bg-page: #F4F6FA;      /* 页面底 */
+  --bg-soft: #F7F9FC;      /* 浅底：分区、表格隔行 */
+  --bg-note: #F2F6FB;      /* 注释底 */
+  --bg-callout: #FDF6E9;   /* 提示块底（金） */
+  --bg-head: #EFF3F8;      /* 分区标题底纹 */
+  --bg-deep: #EAEFF6;      /* 更深的浅底：开关轨道、头像块 */
+  --line: #D9E2EC;         /* 常规边框 */
+  --line-soft: #E5EBF3;    /* 分区边框 */
+  --grid: #E9EFF6;         /* 网格底纹／蓝图网格 */
+
+  /* ── 状态色（文字＋颜色双编码，不单靠颜色） ─────────────── */
+  --ok: #16A34A;           /* 正常／成功 */
+  --ok-bg: #E7F6EC;
+  --warn: #E39217;         /* 警告／待处理 */
+  --warn-bg: #FDF3E1;
+  --err: #E0483E;          /* 异常／失败／越界 */
+  --err-bg: #FBEAE8;
+  --info: #0A6F88;         /* 进行中／信息 */
+  --info-bg: #E8F2F6;
+
+  /* ── 字体 ───────────────────────────────────────────────── */
+  --font-ui: "HarmonyOS Sans SC", "MiSans", "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-disp: "Rajdhani", "HarmonyOS Sans SC", "Noto Sans SC", "MiSans", "Microsoft YaHei", sans-serif;  /* 数字与标题：装了 Rajdhani 自动生效，否则用本机鸿蒙/思源 */
+  --font-doc-head: "微软雅黑", "Microsoft YaHei", sans-serif;  /* Word 标题/表格 */
+  --font-doc-body: "宋体", SimSun, serif;                       /* Word 正文 */
+  --font-num: "IBM Plex Mono", "Consolas", "SFMono-Regular", monospace;  /* 编号、标签、版本号 */
+
+  /* ── 字号 ───────────────────────────────────────────────── */
+  --fs-h1: 22px;
+  --fs-h2: 20px;
+  --fs-h3: 16px;
+  --fs-body: 14px;
+  --fs-sm: 13px;
+  --fs-xs: 12px;
+  --fs-label: 10px;        /* 等宽标签：分组标题、表头 */
+  --lh-body: 1.7;
+
+  /* ── 间距 ───────────────────────────────────────────────── */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;
+  --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
+
+  /* ── 圆角、切角与阴影 ───────────────────────────────────── */
+  --r-sm: 2px; --r-md: 3px; --r-lg: 3px; --r-xl: 14px; --r-plan-card: 48px; --r-pill: 999px;
+  --chamfer: 10px;                         /* 工业切角尺寸 */
+  --cut: var(--chamfer);
+  --sh-card: 0 1px 2px rgba(22, 40, 66, .05);
+  --sh-pop: 0 12px 32px rgba(22, 40, 66, .10);
+
+  /* ── 遮罩与聚焦环（弹层、可访问性；页面不得自写 rgba） ───── */
+  --mask: rgba(22, 40, 66, .42);
+  --focus-ring: 0 0 0 3px rgba(13, 143, 174, .12);
+
+  /* ── 语义令牌：组件只用这些，换档只改本段与深色档 ───────── */
+  --panel-bg: #FFFFFF;                    /* 卡片、区块、弹窗、输入控件底 */
+  --panel-bg-2: #F7F9FC;                  /* 分区底、骨架底、次按钮底 */
+  --panel-bg-3: #EAEFF6;                  /* 头像块、开关轨道 */
+  --panel-line: var(--line-soft);
+  --table-head-bg: #F7F9FC;
+  --table-head-fg: #7E93A9;
+  --table-row-hover: rgba(13, 143, 174, .05);
+  /* 固定列（首列／操作列）必须不透明：横向滚动时下方内容不得透出 */
+  --table-sticky-bg: #FFFFFF;
+  --table-sticky-hover: #F3F9FB;           /* = --panel-bg 叠 --table-row-hover 的实色 */
+  --btn-primary-bg: linear-gradient(90deg, var(--gold-web), var(--gold-l));
+  --btn-primary-fg: #161004;
+  --btn-primary-hover: #F0A32B;
+  --btn-danger-bg: var(--err);  --btn-danger-fg: #FFFFFF;
+  --topbar-bg: rgba(255, 255, 255, .86);  --topbar-fg: var(--ink);  --topbar-line: var(--line-soft);
+  --nav-bg: #FBFCFE;            --nav-fg: #54697F;  --nav-fg-dim: #7E93A9;
+  --nav-hover-bg: #F7F9FC;      --nav-active-bg: rgba(227, 146, 23, .08);
+  --nav-active-fg: #B26A00;     --nav-accent: #B26A00;
+  --on-accent: #161004;         /* 琥珀底上的文字（深色档反转） */
+  --tag-line: rgba(13, 143, 174, .35);
+  --tag-bg: rgba(13, 143, 174, .06);
+  --ok-line: rgba(22, 163, 74, .40);   --ok-soft: rgba(22, 163, 74, .07);
+  --warn-line: rgba(227, 146, 23, .40); --warn-soft: rgba(227, 146, 23, .07);
+  --err-line: rgba(224, 72, 62, .40);   --err-soft: rgba(224, 72, 62, .07);
+  --glow-teal: rgba(13, 143, 174, .10);    /* 装饰光晕（青） */
+  --glow-gold: rgba(227, 146, 23, .10);    /* 装饰光晕（金） */
+  --state-line: var(--line);
+}
+
+/* ============ 深色档（备用：<html data-theme="portal">） ============
+   只覆盖令牌，不改组件类；默认浅色工业风，深色档用于监控大屏等少数场景。 */
+[data-theme="portal"] {
+  --navy: #E8F1FF; --navy-2: #CFE4F7; --navy-title: #E8F1FF;
+  --ink: #E8F1FF; --body: #D8E7F8; --gray: #A3BAD8; --gray-l: #7E96B5;
+  --teal: #2FD8FF; --teal-web: #4FE0FF; --teal-l: rgba(47, 216, 255, .38);
+  --gold: #FFB547; --gold-web: #FFB547; --gold-d: #E6A033; --gold-l: #FFD08A;
+  --bg-page: #12203A; --bg-soft: #17273E; --bg-note: #182A42; --bg-callout: #22303F;
+  --bg-head: #1B3A5C; --bg-deep: #0E1B30;
+  --line: rgba(120, 180, 255, .24); --line-soft: rgba(120, 180, 255, .16);
+  --grid: rgba(47, 216, 255, .08);
+  --ok: #57E6A8; --ok-bg: rgba(87, 230, 168, .12);
+  --warn: #FFD27A; --warn-bg: rgba(245, 158, 11, .12);
+  --err: #FF8374; --err-bg: rgba(239, 68, 68, .12);
+  --info: #9ECBFF; --info-bg: rgba(59, 130, 246, .14);
+  --mask: rgba(6, 14, 26, .68);
+  --focus-ring: 0 0 0 3px rgba(47, 216, 255, .22);
+  --sh-card: 0 8px 24px rgba(0, 0, 0, .35);
+  --sh-pop: 0 18px 50px rgba(0, 0, 0, .55);
+  --panel-bg: rgba(23, 39, 62, .72);
+  --panel-bg-2: rgba(18, 32, 58, .72);
+  --panel-bg-3: rgba(14, 27, 48, .9);
+  --table-head-bg: rgba(30, 50, 80, .55);
+  --table-head-fg: #7FB6D9;
+  --table-row-hover: rgba(47, 216, 255, .06);
+  --table-sticky-bg: #15243A;              /* 深色档半透明面板的实色合成 */
+  --table-sticky-hover: #162E46;
+  --btn-primary-bg: linear-gradient(90deg, #FFB547, #FFD08A);
+  --btn-primary-fg: #1A1002; --btn-primary-hover: #FFC163;
+  --btn-danger-bg: rgba(239, 68, 68, .16); --btn-danger-fg: #FF8374;
+  --topbar-bg: rgba(17, 30, 52, .78); --topbar-fg: #E8F1FF; --topbar-line: rgba(120, 180, 255, .24);
+  --nav-bg: rgba(17, 30, 52, .72); --nav-fg: #D8E7F8; --nav-fg-dim: #A3BAD8;
+  --nav-hover-bg: rgba(47, 216, 255, .08); --nav-active-bg: rgba(255, 181, 71, .12); --nav-active-fg: #FFB547;
+  --nav-accent: #FFB547; --on-accent: #1A1002;
+  --tag-line: rgba(47, 216, 255, .40); --tag-bg: rgba(47, 216, 255, .08);
+  --ok-line: rgba(87, 230, 168, .40);  --ok-soft: rgba(87, 230, 168, .10);
+  --warn-line: rgba(255, 210, 122, .40); --warn-soft: rgba(245, 158, 11, .10);
+  --err-line: rgba(255, 131, 116, .40);  --err-soft: rgba(239, 68, 68, .10);
+}
+
+/* 打印：去底色、去阴影，保证黑白可读 */
+@media print {
+  :root { --sh-card: none; --sh-pop: none; --nav-bg: #fff; --topbar-bg: #fff; }
+}
