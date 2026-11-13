@@ -833,3 +833,140 @@ html, body { margin: 0; padding: 0; }
 @media (max-width: 720px) {
   .vc-grid, .vc-grid--3, .vc-grid--4 { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* 2026-11-11：污水厂场景，复用现有组件，作用域限定到新业务页 */
+[data-scene="water-operations"] .vc-section,[data-scene="water-operations"] .vc-table__wrap{border-radius:6px;box-shadow:none}
+[data-scene="water-operations"] .vc-btn{border-radius:4px;letter-spacing:0;min-height:34px}
+[data-scene="water-operations"] .vc-btn--primary{box-shadow:none}
+[data-scene="water-operations"] .vc-btn--primary:hover{background:var(--btn-primary-hover);filter:none}
+[data-scene="water-operations"] .vc-input,[data-scene="water-operations"] .vc-select,[data-scene="water-operations"] .vc-textarea{border-radius:4px;background:var(--panel-bg)}
+[data-scene="water-operations"] .vc-input,[data-scene="water-operations"] .vc-select{height:36px}
+[data-scene="water-operations"] .vc-table th{font-size:13px;font-weight:600;letter-spacing:0;padding:13px 16px}
+[data-scene="water-operations"] .vc-table td{padding:13px 16px}
+[data-scene="water-operations"] .vc-tag{border-radius:4px}
+[data-scene="water-operations"] .vc-btn--text:hover{color:var(--teal)}
+
+/* 2026-11-12：列表按可用高度布局；滚动限于表格，查询和分页固定可见 */
+html.org-is-list,html.org-is-list body{height:100%;overflow:hidden}
+.org-is-list .org-page{height:100%;display:flex;flex-direction:column;padding:20px 24px;min-height:0}
+.org-is-list .org-head{flex:none;margin-bottom:16px}
+.org-is-list .org-head h1{margin:0}
+.org-is-list .org-toast:empty{display:none}
+.org-is-list #list-view{flex:1;min-height:0;display:flex;flex-direction:column;margin-bottom:0;padding:20px 24px}
+.org-is-list .org-search,.org-is-list .org-toolbar,.org-is-list .org-bottom{flex:none}
+.org-is-list .org-toolbar{margin:16px 0}
+.org-is-list .vc-table__wrap{min-height:0;overflow:auto}
+.org-is-list .vc-table thead{position:sticky;top:0;z-index:2}
+.org-is-list .org-bottom{margin-top:auto;padding-top:16px}
+.org-is-list .vc-table td{padding:10px 16px}
+@media(max-height:700px){.org-is-list .org-page{padding:12px 18px}.org-is-list #list-view{padding:14px 18px}.org-is-list .org-head{margin-bottom:12px}.org-is-list .org-toolbar{margin:10px 0}.org-is-list .vc-table td{padding:7px 12px}}
+
+/* 2026-11-12：页头标题与新增主操作同一行 */
+[data-scene="water-operations"] .org-head h1{font-size:20px;line-height:1.5}
+[data-scene="water-operations"] .org-head{align-items:center}
+[data-scene="water-operations"] .org-head #create[hidden]{display:none!important}
+
+/* 2026-11-12：查询与列表分别独立成块；分页可选择页容量 */
+.org-is-list #list-view.org-list-layout{padding:0;background:transparent;border:0;gap:16px}
+.org-query-panel{flex:none;margin:0;padding:20px 24px}
+.org-query-panel .org-search{margin:0}
+.org-results-panel{flex:1;min-height:0;display:flex;flex-direction:column;margin:0;padding:20px 24px}
+.org-pager>.vc-select{width:102px;min-width:102px;height:34px}
+@media(max-height:700px){.org-query-panel,.org-results-panel{padding:14px 18px}.org-is-list #list-view.org-list-layout{gap:12px}}
+
+/* 通用列表页头字号与对齐；复用现有pagehead组件 */
+.vc-pagehead h1{font-size:20px;line-height:1.5}
+.vc-pagehead{display:flex;align-items:center;justify-content:space-between}
+
+.org-head-actions{display:flex;align-items:center;gap:12px}.org-head-actions[hidden]{display:none!important}
+
+/* 2026-11-12：新增、编辑、详情页标题行右侧操作 */
+.org-subhead{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line-soft);padding-bottom:16px;margin-bottom:24px}
+.org-form .org-subhead h2{margin:0;padding:0;border:0;font-size:20px}
+.org-detail>.org-toolbar{align-items:center;margin-top:0;border-bottom:1px solid var(--line-soft);padding-bottom:16px}
+.org-detail>.org-toolbar h2{margin:0;padding:0;border:0;font-size:20px}
+.org-form .org-subhead,.org-detail>.org-toolbar{position:sticky;top:0;z-index:3;background:var(--panel-bg)}
+
+/* 页面级操作位于卡片外、主标题同行右上角 */
+.org-form-actions,.org-detail-actions{display:flex;gap:12px;align-items:center}.org-form-actions[hidden],.org-detail-actions[hidden]{display:none!important}
+
+/* 复选框列固定左侧，横向滚动不移动；不透明背景避免透出数据 */
+[data-scene="water-operations"] .vc-table .org-selection-cell{position:sticky;left:0;z-index:3;width:44px;min-width:44px;text-align:center;background:var(--table-sticky-bg);box-shadow:1px 0 0 var(--line-soft)}
+[data-scene="water-operations"] .vc-table th.org-selection-cell{z-index:4;background:var(--table-head-bg)}
+[data-scene="water-operations"] .vc-table tr:hover td.org-selection-cell{background:var(--table-sticky-hover)}
+
+/* 居中Toast：不占业务布局，不弹确认框 */
+[data-scene="water-operations"] .org-toast{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:1000;max-width:min(560px,calc(100vw - 48px));width:max-content;margin:0;padding:16px 24px;background:var(--panel-bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;box-shadow:var(--sh-pop);line-height:1.7;overflow-wrap:anywhere;pointer-events:none}
+[data-scene="water-operations"] .org-toast:empty{display:none}
+
+/* 三列表单与边框详情，沿用现有令牌与vc页签 */
+[data-scene="water-operations"] .org-form{max-width:none}
+[data-scene="water-operations"] .org-form .vc-form-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+[data-scene="water-operations"] .org-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;margin:20px 0 0;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+[data-scene="water-operations"] .org-kv{display:grid;grid-template-columns:140px minmax(0,1fr);padding:0;gap:0;border:0;border-bottom:1px solid var(--line);border-right:1px solid var(--line);min-height:48px}
+[data-scene="water-operations"] .org-kv dt{background:var(--bg-soft);padding:14px 16px;color:var(--gray);border-right:1px solid var(--line);display:flex;align-items:center}
+[data-scene="water-operations"] .org-kv dd{padding:14px 16px;align-content:center;background:var(--panel-bg)}
+[data-scene="water-operations"] .org-detail-tabs{border-bottom:1px solid var(--line);margin-bottom:20px}
+[data-scene="water-operations"] .vc-tabs__item--active{color:var(--teal);border-bottom-color:var(--teal)}
+[data-scene="water-operations"] .org-detail-tabs .vc-tabs__item{font-size:14px}
+@media(max-width:1000px){[data-scene="water-operations"] .org-form .vc-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}[data-scene="water-operations"] .org-kv{grid-template-columns:110px minmax(0,1fr)}}
+@media(max-width:640px){[data-scene="water-operations"] .org-form .vc-form-grid,[data-scene="water-operations"] .org-details{grid-template-columns:1fr}}
+
+/* 2026-11-12：详情默认每行三组标签和值 */
+[data-scene="water-operations"] .org-details{grid-template-columns:repeat(3,minmax(0,1fr))}
+[data-scene="water-operations"] .org-kv{grid-template-columns:110px minmax(0,1fr)}
+@media(max-width:1000px){[data-scene="water-operations"] .org-details{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){[data-scene="water-operations"] .org-details{grid-template-columns:1fr}}
+
+/* 2026-11-12：新增编辑与详情统一标签—值边框网格 */
+[data-scene="water-operations"] .org-form .vc-form-grid{gap:0;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+[data-scene="water-operations"] .org-form .org-field{display:grid;grid-template-columns:110px minmax(0,1fr);gap:0;min-height:64px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--panel-bg)}
+[data-scene="water-operations"] .org-form .org-field>span{display:flex;align-items:center;padding:14px 16px;background:var(--bg-soft);color:var(--gray);border-right:1px solid var(--line)}
+[data-scene="water-operations"] .org-form .org-field>.vc-input,[data-scene="water-operations"] .org-form .org-field>.vc-select,[data-scene="water-operations"] .org-form .org-field>.vc-textarea{width:calc(100% - 24px);min-width:0;margin:12px;align-self:center}
+[data-scene="water-operations"] .org-form .org-field>.vc-textarea{min-height:84px}
+
+/* 表单与详情统一尺寸：列宽、标签、单元格行高、字号、页签 */
+[data-scene="water-operations"] .org-form,[data-scene="water-operations"] .org-detail{padding:24px;max-width:none}
+[data-scene="water-operations"] .org-form .vc-form-grid,[data-scene="water-operations"] .org-details{margin:20px 0 0;gap:0;grid-auto-rows:minmax(60px,auto)}
+[data-scene="water-operations"] .org-form .org-field,[data-scene="water-operations"] .org-kv{grid-template-columns:110px minmax(0,1fr);min-height:60px;font-size:14px}
+[data-scene="water-operations"] .org-form .org-field>span,[data-scene="water-operations"] .org-kv dt{padding:12px 16px;font-size:14px;font-weight:400;line-height:1.6}
+[data-scene="water-operations"] .org-kv dd{padding:12px;font-size:14px;line-height:1.6}
+[data-scene="water-operations"] .org-form .org-field>.vc-input,[data-scene="water-operations"] .org-form .org-field>.vc-select{margin:12px;height:36px;font-size:14px}
+[data-scene="water-operations"] .org-form-tabs,[data-scene="water-operations"] .org-detail-tabs{margin:0;border-bottom:1px solid var(--line);padding:0}
+[data-scene="water-operations"] .org-form-tabs .vc-tabs__item,[data-scene="water-operations"] .org-detail-tabs .vc-tabs__item{font-size:14px;line-height:1.6;padding:10px 16px}
+
+/* 2026-11-12：参照用户字段网格截图，统一行高与字号 */
+[data-scene="water-operations"] .org-form .org-field,[data-scene="water-operations"] .org-kv{min-height:60px;font-size:16px}
+[data-scene="water-operations"] .org-form .org-field>span,[data-scene="water-operations"] .org-kv dt,[data-scene="water-operations"] .org-kv dd{font-size:16px;line-height:1.5;padding:12px 16px}
+[data-scene="water-operations"] .org-form .org-field>.vc-input,[data-scene="water-operations"] .org-form .org-field>.vc-select,[data-scene="water-operations"] .org-form .org-field>.vc-textarea{font-size:16px;line-height:1.5}
+
+/* 2026-11-12：用户纠正为紧凑尺寸，覆盖此前60px／16px方案 */
+[data-scene="water-operations"] .org-form .vc-form-grid,[data-scene="water-operations"] .org-details{grid-auto-rows:minmax(48px,auto)}
+[data-scene="water-operations"] .org-form .org-field,[data-scene="water-operations"] .org-kv{min-height:48px;font-size:14px}
+[data-scene="water-operations"] .org-form .org-field>span,[data-scene="water-operations"] .org-kv dt,[data-scene="water-operations"] .org-kv dd{font-size:14px;line-height:1.5;padding:8px 12px}
+[data-scene="water-operations"] .org-form .org-field>.vc-input,[data-scene="water-operations"] .org-form .org-field>.vc-select,[data-scene="water-operations"] .org-form .org-field>.vc-textarea{font-size:14px;line-height:1.5;width:calc(100% - 16px);margin:8px}
+[data-scene="water-operations"] .org-form .org-field>.vc-input,[data-scene="water-operations"] .org-form .org-field>.vc-select{height:32px}
+[data-scene="water-operations"] .org-form .org-field>.vc-textarea{min-height:64px}
+
+/* 2026-11-12：字段网格再次统一收紧 */
+[data-scene="water-operations"] .org-form .vc-form-grid,[data-scene="water-operations"] .org-details{grid-auto-rows:minmax(40px,auto)}
+[data-scene="water-operations"] .org-form .org-field,[data-scene="water-operations"] .org-kv{min-height:40px;font-size:13px}
+[data-scene="water-operations"] .org-form .org-field>span,[data-scene="water-operations"] .org-kv dt,[data-scene="water-operations"] .org-kv dd{font-size:13px;line-height:1.5;padding:6px 10px}
+[data-scene="water-operations"] .org-form .org-field>.vc-input,[data-scene="water-operations"] .org-form .org-field>.vc-select,[data-scene="water-operations"] .org-form .org-field>.vc-textarea{font-size:13px;line-height:1.5;width:calc(100% - 12px);margin:6px}
+[data-scene="water-operations"] .org-form .org-field>.vc-input,[data-scene="water-operations"] .org-form .org-field>.vc-select{height:28px}
+[data-scene="water-operations"] .org-form .org-field>.vc-textarea{min-height:52px}
+
+
+
+/* 2026-11-12：保留原布局，仅细化表单与详情视觉状态 */
+[data-scene="water-operations"] .org-form .org-field>span,[data-scene="water-operations"] .org-kv dt{color:var(--gray);font-weight:400}
+.org-required{color:var(--err);font-size:12px;font-weight:400;margin-left:4px}
+[data-scene="water-operations"] .org-form .org-field>.vc-input,[data-scene="water-operations"] .org-form .org-field>.vc-select,[data-scene="water-operations"] .org-form .org-field>.vc-textarea{border-color:var(--line-soft);border-radius:3px;background:var(--panel-bg);color:var(--ink);transition:border-color .18s,box-shadow .18s}
+[data-scene="water-operations"] .org-form .org-field>.vc-input:hover,[data-scene="water-operations"] .org-form .org-field>.vc-select:hover,[data-scene="water-operations"] .org-form .org-field>.vc-textarea:hover{border-color:var(--steel)}
+[data-scene="water-operations"] .org-form .org-field>.vc-input:focus,[data-scene="water-operations"] .org-form .org-field>.vc-select:focus,[data-scene="water-operations"] .org-form .org-field>.vc-textarea:focus{border-color:var(--teal);box-shadow:0 0 0 2px var(--info-bg);outline:none}
+[data-scene="water-operations"] .org-form .org-field>.vc-input:read-only,[data-scene="water-operations"] .org-form .org-field>.vc-select:disabled{background:var(--bg-soft);color:var(--gray);opacity:1;border-color:var(--line-soft)}
+[data-scene="water-operations"] .org-form .org-field>.vc-input:read-only{cursor:default}
+[data-scene="water-operations"] .org-kv dd{color:var(--ink)}
+[data-scene="water-operations"] .org-form .org-remark-tail{grid-column:span 2}
+@media(max-width:1000px){[data-scene="water-operations"] .org-form .org-remark-tail{grid-column:span 1}}
+@media(prefers-reduced-motion:reduce){[data-scene="water-operations"] .org-form input,[data-scene="water-operations"] .org-form select,[data-scene="water-operations"] .org-form textarea{transition:none}}

@@ -154,3 +154,9 @@
 @media print {
   :root { --sh-card: none; --sh-pop: none; --nav-bg: #fff; --topbar-bg: #fff; }
 }
+
+/* 2026-11-11：污水厂业务原型，沿用vc组件的浅色场景令牌 */
+:root[data-scene="water-operations"] {
+ --btn-primary-bg:var(--teal);--btn-primary-fg:#FFFFFF;--btn-primary-hover:var(--navy-2);
+ --sh-card:none;--panel-line:var(--line-soft);--table-head-bg:var(--bg-soft);--table-head-fg:var(--gray);
+}
